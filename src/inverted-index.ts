@@ -1,15 +1,21 @@
-import { Filter, Analyzer, AnyObject, Tokenizer } from './types';
+import {
+  FilterConfig,
+  AnalyzerConfig,
+  AnyObject,
+  TokenizerConfig,
+  Mapping,
+} from './types';
 
 export type IndexOptions = {
   analysis: {
     filter?: {
-      [property: string]: Filter;
+      [property: string]: FilterConfig;
     };
     tokenizer?: {
-      [property: string]: Tokenizer;
+      [property: string]: TokenizerConfig;
     };
     analyzer?: {
-      [property: string]: Analyzer;
+      [property: string]: AnalyzerConfig;
     };
   };
 };
@@ -34,6 +40,7 @@ export class Index {
   private _documents: Map<string, AnyObject>;
   // private _invertedIndex: Map<string, AnyObject>;
   private _idField = 'id';
+  private _mappings: Mapping = {};
 
   constructor(options?: IndexOptions) {
     this._options = options || IndexOptionsDefault;
@@ -48,8 +55,20 @@ export class Index {
     return this._idField;
   }
 
-  getData(): Map<string, AnyObject> {
+  set mappings(mappings: Mapping) {
+    this._mappings = mappings;
+  }
+
+  get mappings(): Mapping {
+    return this._mappings;
+  }
+
+  get documents(): Map<string, AnyObject> {
     return this._documents;
+  }
+
+  get expandedMappings() {
+
   }
 
   async add(id: string, doc: AnyObject): Promise<Index> {

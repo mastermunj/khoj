@@ -3,16 +3,30 @@ export interface AnyObject {
   [property: string]: any;
 }
 
-export type Filter = {
+export type FilterConfig = {
   type: string;
 } & AnyObject;
 
-export type Tokenizer = {
+export type TokenizerConfig = {
   type: string;
 } & AnyObject;
 
-export type Analyzer = {
+export type AnalyzerConfig = {
   type: string;
-  tokenizer?: Tokenizer;
+  tokenizer?: TokenizerConfig;
   filter?: string[];
+};
+
+export enum MappingType {
+  keyword = 'keyword',
+  text = 'text',
+}
+
+export type Mapping = {
+  [property: string]: {
+    type: MappingType;
+    analyzer?: string;
+    searchAnalyzer?: string;
+    properties?: Mapping;
+  };
 };
